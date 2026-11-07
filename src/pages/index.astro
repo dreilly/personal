@@ -1,0 +1,64 @@
+---
+import '@fontsource-variable/manrope';
+import { profile } from '../data/profile';
+import '../styles/global.css';
+
+const links = [
+  ...(profile.email ? [{ label: 'email', url: `mailto:${profile.email}` }] : []),
+  ...profile.socials.filter((social) => social.url),
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f3f0e7" />
+    <meta name="description" content={profile.name} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{profile.name}</title>
+  </head>
+  <body>
+    <div class="page">
+      <main id="main">
+        <section class="introduction" aria-labelledby="name">
+          <div class="name-block">
+            <p class="eyebrow"><span class="asterisk" aria-hidden="true">✳</span> hello, i'm</p>
+            <h1 id="name" aria-label={profile.name}>{profile.name.split(' ').map((name, index, names) => (
+              <span>{name}{index === names.length - 1 && <span class="full-stop" aria-hidden="true">.</span>}</span>
+            ))}</h1>
+          </div>
+          <div class="about">
+            <span class="small-rule" aria-hidden="true"></span>
+            <p>{profile.bio}</p>
+          </div>
+        </section>
+
+        <section class="contact" aria-label="contact links">
+          {links.length > 0 ? (
+            <ul class="links">
+              {links.map((link) => (
+                <li>
+                  <a
+                    href={link.url}
+                    target={link.url.startsWith('https://') ? '_blank' : undefined}
+                    rel={link.url.startsWith('https://') ? 'noopener noreferrer' : undefined}
+                  >
+                    {link.label}<span aria-hidden="true">↗</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class="coming-soon">a few links will live here soon.</p>
+          )}
+        </section>
+      </main>
+
+      <footer>
+        <span>© {new Date().getFullYear()} {profile.name}</span>
+      </footer>
+    </div>
+  </body>
+</html>
